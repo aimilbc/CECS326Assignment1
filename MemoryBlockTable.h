@@ -18,7 +18,7 @@ public:
     int isEmptyBlocks();
     void print();
     int nextEmplyBlockIndex();
-    void initiateBlocks(int, int**);
+    void initiateBlocks(int, int*&);
 };
 
 #endif /* MemoryBlockTable_h */

@@ -9,16 +9,19 @@
 #ifndef ProcessControlBlock_h
 #define ProcessControlBlock_h
 #include "MemoryBlockTable.h"
-#include <sys/types.h>
-#include <unistd.h>
+//#include <sys/types.h>
+//#include <unistd.h>
 
 class ProcessControlBlock{
-    pid_t pid;
-    int* pageTable;
+    int pid, size;
+    int* pageTablePtr;
 public:
     ProcessControlBlock();
-    ProcessControlBlock(int, MemoryBlockTable&);
+    ProcessControlBlock(int randPID, int randNumForSize, MemoryBlockTable&);
     void print();
+    void printPID();
+    void printSize();
+    void printMBTIndex();
 };
 
 #endif /* ProcessControlBlock_h */

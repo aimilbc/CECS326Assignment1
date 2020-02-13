@@ -17,44 +17,56 @@ using namespace std;
 struct Node{
     ProcessControlBlock data;
     Node *link;
+    Node(ProcessControlBlock *pcb){
+        data = *pcb;
+        link = NULL;
+    }
 };
 
 class Queue{
     Node *front, *rear;
+
 public:
+    
     Queue()
     {
         front =rear = NULL;
     }
     
-    void enque(ProcessControlBlock& pcb){
-        Node *temp;
-        temp = new Node;
-        pcb = temp -> data;
-//        cout << "Enter the data: ";
-//        cin >> temp -> data;
-        temp -> link = NULL;
-        if(front == NULL){
+    void enque(ProcessControlBlock *pcb){
+        Node *temp = new Node(pcb);
+        if(rear == NULL){
             front = rear = temp;
-        }else{
-            rear -> link = temp;
-            rear = temp;
+            return;
         }
-        //cout << "the pcb has been enque!!!" << endl;
+        rear->link = temp;
+        rear = temp;
     }
     
     void dequeue(){
-        Node *ptr;
-        if(front == NULL)
-            cout << "It's empty" << endl;
-        else if (front == rear){
-            delete front;
-            front = rear = NULL;
-        }else{
-            ptr = front;
-            front = front->link;
-            delete ptr;
+        if(front == NULL){
+            cout << "It's empty..." << endl;
         }
+        
+        Node *temp = front;
+        front = front->link;
+        if(front == NULL){
+            rear = NULL;
+        }
+        
+        delete temp;
+//
+//        Node *ptr;
+//        if(front == NULL)
+//            cout << "It's empty..." << endl;
+//        else if (front == rear){
+//            delete front;
+//            front = rear = NULL;
+//        }else{
+//            ptr = front;
+//            front = front->link;
+//            delete ptr;
+//        }
     }
     
     void print(){
@@ -63,7 +75,6 @@ public:
         if(front == NULL)
             cout << "There is no ready queue." << endl;
         while(temp != NULL){
-            cout << "Okay, here is the pid for this queue" << endl;
             temp->data.print();
             temp = temp->link;
         }
@@ -85,19 +96,7 @@ int mainMenu(){
 
 int main(int argc, const char * argv[]) {
     int randNum;
-    
-    pid_t pidd;
-    
-    pid_t pidd1 = getppid();
-    pid_t pidd2 = getppid();
-    pid_t pidd3 = getppid();
-    
-    cout << pidd1 << " " << pidd2 << " " << pidd3 << endl;
-    for (int i  = 0; i<3; i++){
-        pidd = getpid();
-        cout << "checking pid" << i+1 << ": " << pidd << endl;
-    }
-    
+    int randPID = 1000;
     int menuAction = mainMenu();
     Queue readyQ;
     MemoryBlockTable mbt;
@@ -117,14 +116,15 @@ int main(int argc, const char * argv[]) {
                 menuAction = mainMenu();
             }
             else{
+                
                 cout << "\t\t\t\tRequested block number is " << randNum << endl;
                 cout << "\t\t\t\tAvailable block number is " << mbt.isEmptyBlocks() << endl;
                 cout << "\t\t\t\tI'll proceed your request..." << endl;
-                ProcessControlBlock *pcb = new ProcessControlBlock(randNum, mbt);
+                randPID++;
+                ProcessControlBlock *pcb = new ProcessControlBlock(randPID, randNum, mbt);
                 cout << "\t\t\t\tThe next available index number is " << mbt.nextEmplyBlockIndex();
-//                cout << "\nNow, the MBT looks like  ";    // statement to check if the function is working properly
-//                mbt.print();
-                readyQ.enque(*pcb);                             // WORK FROM HERE, DO: HOW TO PRINT QUEUE TO SEE ITS WORKING OR NOT
+                readyQ.enque(pcb);
+                delete pcb;
             }
         }else if (menuAction==2){
             cout << "\n-----------------------------------2) Print----------------------------------" << endl; // print

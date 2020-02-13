@@ -24,14 +24,14 @@ void MemoryBlockTable::print(){
     
     cout << "\t" ;
     for (int i = 0; i < 10; i++){
-        cout << left << setw(4) << (i);
+        cout << left << setw(5) << (i);
     }
     cout << endl << endl;
     for (int i = 1; i <= BLOCKSIZE; i++){
         if((i % 10) == 1){
             cout << (i-1) << "\t";
         }
-        cout << left << setw(4) << blocks[i];
+        cout << left << setw(5) << blocks[i];
         if((i % 10) == 0){
             cout << endl;
         }
@@ -54,13 +54,15 @@ int MemoryBlockTable::nextEmplyBlockIndex(){
     return i-1;
 }
 
-void MemoryBlockTable::initiateBlocks(int size, int *pt[]){
+void MemoryBlockTable::initiateBlocks(int size, int *&pt){
     index = nextEmplyBlockIndex();          // initializing the first empty element's index number to int index in MBT
     int until = nextEmplyBlockIndex() + size; // storing the end index number
     for (int i = index; i < until; i++){
         blocks[i] = false;                  // change the status of each box
-        pt[i-index] = &i;                            // initiate a pointer from PCB to int index in MBT
+        pt[i-index] = i;                            // initiate a pointer from PCB to int index in MBT
     }
-//    cout << "okay, let's see the blocks..." << endl;  // statement to check if the function is working properly
-//    print();
+//    cout << "okay, let's see the pagetable..." << endl;  // statement to check if the function is working properly
+//    for (int i = index; i < until; i++){
+//        cout << *pt[i] << endl;;
+//    }
 }
